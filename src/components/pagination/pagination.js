@@ -4,9 +4,7 @@ import { Button } from '../button/button'
 // import { IcoArrowForward, IcoArrowBack, IcoSpinner } from '../icon'
 
 const textDefault = {
-  de: 'of',
-  paginas: 'pages',
-  itens: 'Registers',
+  text: '{{pageNumber}} of {{totalPages}} - {{totalElements}} registers',
   next: 'Next',
   before: 'Previous',
   reload: 'Update'
@@ -14,9 +12,17 @@ const textDefault = {
   // before: <IcoArrowBack />,
   // reload: <IcoSpinner />
 }
-export function Paginate({ data = { pageNumber: 0, totalPages: 1, totalElements: 0 }, action, text = textDefault }) {
-  const [paginateTemp, setPaginateTemp] = useState(String(data.pageNumber ? data.pageNumber : 1))
 
+const adjustText = (text, infos) => {
+  let result = text
+  Object.keys(infos).forEach((key) => {
+    result = String(result).replaceAll(`{{${key}}}`, String(infos[key]));
+  });
+  return result
+}
+
+export function Paginate({ data = { pageNumber: 1, totalPages: 1, totalElements: 0 }, action, text = textDefault }) {
+  const [paginateTemp, setPaginateTemp] = useState(String(data.pageNumber ? data.pageNumber : 1))
   const changePaginate = event => {
     setPaginateTemp(event.target.value)
   }
@@ -24,51 +30,68 @@ export function Paginate({ data = { pageNumber: 0, totalPages: 1, totalElements:
   const reloadPaginate = event => {
     if (event || event === 0) {
       if (event <= data.totalPages) {
-        setPaginateTemp(event + 1)
+        setPaginateTemp(event)
         action(event)
       }
     } else if (paginateTemp >= 1 && paginateTemp <= data.totalPages) {
-      action(Number(paginateTemp - 1))
+      action(Number(paginateTemp))
     } else {
-      setPaginateTemp(data.pageNumber + 1)
+      setPaginateTemp(data.pageNumber)
     }
   }
 
   return (
     <div className='pagination-custom'>
-      <Button
-        type='btn circle'
-        color='primary'
-        onClick={() => reloadPaginate(data.pageNumber - 1)}
-        disabled={data.pageNumber === 0 ? true : false}
-      >
-        {text.before}
-      </Button>
-      <div className='page-item'>
-        <input type='number' name='paginate' value={paginateTemp} onChange={event => changePaginate(event)} />
-        <Button
-          type='btn circle'
-          color='primary'
-          onClick={() => reloadPaginate()}
-          disabled={data.totalElements === 0 ? true : false}
-        >
-          {text.reload}
-        </Button>
-      </div>
+      {
+        data.totalElements > 0 ?
+        <>
+          <Button
+            type='btn circle'
+            color='primary'
+            onClick={() => reloadPaginate(data.pageNumber - 1)}
+            disabled={data.pageNumber <= 1 ? true : false}
+          >
+            {text.before}
+          </Button>
+          <div className='page-item'>
+            <input type='number' name='paginate' value={paginateTemp} onChange={event => changePaginate(event)} />
+            <Button
+              type='btn circle'
+              color='primary'
+              onClick={() => reloadPaginate()}
+              disabled={data.totalElements === 0 ? true : false}
+            >
+              {text.reload}
+            </Button>
+          </div>
 
-      <Button
-        type='btn circle'
-        color='primary'
-        onClick={() => reloadPaginate(data.pageNumber + 1)}
-        disabled={data.pageNumber >= data.totalPages - 1 ? true : false}
-      >
-        {text.next}
-      </Button>
+          <Button
+            type='btn circle'
+            color='primary'
+            onClick={() => reloadPaginate(data.pageNumber + 1)}
+            disabled={data.pageNumber >= data.totalPages ? true : false}
+          >
+            {text.next}
+          </Button>
 
-      <span className='pagination-info'>
-        {`${data.pageNumber ? data.pageNumber + 1 : 1} ${text.de} ${data.totalPages ? data.totalPages : 0} ${text.paginas}`}
-        {` - ${data.totalElements ? data.totalElements : 0} ${text.itens}`}
-      </span>
+          <span className='pagination-info'>
+            {adjustText(text.text, data)}
+          </span>
+        </>
+        : <></>
+      }
     </div>
   )
+}
+
+export const PaginateTotal = ({
+  total,
+  totalPerPage
+}) => {
+  const totalPage = total / totalPerPage
+  if (Number.isInteger(totalPage)) {
+    return totalPage
+  } else {
+    return parseInt(total / totalPerPage) + 1
+  }
 }

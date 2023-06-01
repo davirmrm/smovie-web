@@ -18,12 +18,12 @@ export const setDetailMovie = e => ({
 })
 
 export const searchMovie = e => {
-  let params = paramsApi({s: e.search, apikey})
+  let params = paramsApi({s: e.search, apikey, page: e.page})
   return async dispatch => {
     axios.get(`${urlApi}${params}`)
     .then(result => {
       if (result.data.Response === 'True') {
-        dispatch(setListMovies(result.data.Search))
+        dispatch(setListMovies({...result.data, search: e.search, page: e.page}))
       } else {
         dispatch(AddAlert('info', result.data.Error))
       }

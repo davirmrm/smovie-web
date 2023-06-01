@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { AddAlert, Button, Input } from '../../components'
+import { useDispatch, useSelector } from 'react-redux'
+import { AddAlert, Button, Input, Paginate } from '../../components'
 
 import './home.scss'
 import { searchMovie } from './redux/homeActions'
@@ -11,6 +11,7 @@ export default () => {
   const dispatch = useDispatch()
   const nls = require(`./nls/en-US.json`)
   const [searchText, setSearchText] = useState('')
+  const { paginate } = useSelector(state=> state.homeState)
 
   const handleSearch = e => {
     setSearchText(e.value)
@@ -19,10 +20,15 @@ export default () => {
   const handleSearching = e => {
     console.log(e);
     if (e) {
-      dispatch(searchMovie({search: e}))
+      dispatch(searchMovie({search: e, page: 1}))
     } else{
       dispatch(AddAlert('info', nls.mensage.searchNone))
     }
+  }
+
+  const handlePaginate = e => {
+    console.log(e);
+      dispatch(searchMovie({search: paginate.search, page: e}))
   }
 
   return (
@@ -45,6 +51,10 @@ export default () => {
       </div>
 
       <ListMovies />
+      <Paginate
+        data={paginate}
+        action={(e)=> handlePaginate(e)}
+      />
       
       <DetailMovie />
     </div>
