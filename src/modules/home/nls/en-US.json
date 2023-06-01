@@ -1,0 +1,15 @@
+{
+    "search": "Search",
+    "searchPlaceholder": "Enter the title of the movie you would like to know more about",
+
+    "Director": "Director",
+    "Genre": "Genre",
+    "Actors": "Actors",
+    "Ratings": "Ratings",
+    
+    "mensage": {
+      "required": "Required",
+      "searchNone": "Write a title so you can search!"
+    }
+  }
+  
