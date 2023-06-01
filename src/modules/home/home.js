@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AddAlert, Button, Input, Paginate } from '../../components'
+import { AddAlert, Button, IcoClose, Input, Paginate } from '../../components'
 
 import './home.scss'
 import { searchMovie } from './redux/homeActions'
@@ -40,6 +40,12 @@ export default () => {
             placeholder={nls.searchPlaceholder}
             name='search'
             value={searchText}
+            right={
+              searchText &&
+              <Button
+                onClick={()=> handleSearch({value: ''})}
+              ><IcoClose /></Button>
+            }
           />
         </div>
         <div>
