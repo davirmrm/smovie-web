@@ -11,6 +11,11 @@ export const setListMovies = e => ({
   payload: e
 })
 
+export const LIST_MOVIES_CLEAN = 'LIST_MOVIES_CLEAN'
+export const setListMoviesClean = e => ({
+  type: LIST_MOVIES_CLEAN,
+})
+
 export const DETAIL_MOVIES = 'DETAIL_MOVIES'
 export const setDetailMovie = e => ({
   type: DETAIL_MOVIES,

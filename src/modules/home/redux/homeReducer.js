@@ -2,6 +2,7 @@ import { PaginateTotal } from '../../../components'
 import {
   DETAIL_MOVIES,
   LIST_MOVIES,
+  LIST_MOVIES_CLEAN,
 } from './homeActions'
 
 const paginateInit = {
@@ -27,6 +28,11 @@ export default (state = initialState, { type, payload }) => {
           totalElements: payload.totalResults,
           search: payload.search
         } 
+      }
+    case LIST_MOVIES_CLEAN:
+      return { ...state, 
+        listMovies: [], 
+        paginate: paginateInit
       }
     case DETAIL_MOVIES:
       return { ...state, movie: payload }

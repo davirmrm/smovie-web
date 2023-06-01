@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AddAlert, Button, IcoClose, Input, Paginate } from '../../components'
 
 import './home.scss'
-import { searchMovie } from './redux/homeActions'
+import { searchMovie, setListMoviesClean } from './redux/homeActions'
 import ListMovies from './ListMovies'
 import DetailMovie from './detailMovie'
 
@@ -22,7 +22,10 @@ export default () => {
     if (e) {
       dispatch(searchMovie({search: e, page: 1}))
     } else{
-      dispatch(AddAlert('info', nls.mensage.searchNone))
+      dispatch([
+        setListMoviesClean(),
+        AddAlert('info', nls.mensage.searchNone)
+      ])
     }
   }
 
@@ -54,6 +57,13 @@ export default () => {
             onClick={()=> handleSearching(searchText)}
           >{nls.search}</Button>
         </div>
+      </div>
+
+      <div>
+        {
+          paginate.search &&
+          <h4>{paginate.search} - {paginate.totalElements} registers</h4>
+        }
       </div>
 
       <ListMovies />
