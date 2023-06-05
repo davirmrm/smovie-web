@@ -2,6 +2,8 @@
     .box-search{
         display: flex;
         justify-content: center;
+        max-width: 960px;
+        margin: auto;
 
         >div{
             &:first-child{
