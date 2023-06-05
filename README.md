@@ -1,4 +1,4 @@
-# React Project Structure
+# React Project SMOVIE
 
 Search movies, series, games. so that you can find out more information about
 
